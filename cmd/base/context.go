@@ -34,6 +34,7 @@ import (
 
 	"github.com/kubewharf/katalyst-api/pkg/client/informers/externalversions"
 	"github.com/kubewharf/katalyst-core/pkg/client"
+	"github.com/kubewharf/katalyst-core/pkg/config"
 	"github.com/kubewharf/katalyst-core/pkg/config/generic"
 	"github.com/kubewharf/katalyst-core/pkg/consts"
 	"github.com/kubewharf/katalyst-core/pkg/metrics"
@@ -48,7 +49,7 @@ const (
 )
 
 // GenericOptions is used as an extendable way to support
-type GenericOptions func(i interface{})
+type GenericOptions func(i interface{}, config *config.Configuration)
 
 type GenericContext struct {
 	*http.Server

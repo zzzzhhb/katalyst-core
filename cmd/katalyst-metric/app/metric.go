@@ -61,7 +61,7 @@ func Run(opt *options.Options, genericOptions ...katalystbase.GenericOptions) er
 	}
 
 	for _, genericOption := range genericOptions {
-		genericOption(baseCtx)
+		genericOption(baseCtx, conf)
 	}
 
 	baseCtx.Run(ctx)

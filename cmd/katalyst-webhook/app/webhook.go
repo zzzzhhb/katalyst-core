@@ -67,7 +67,7 @@ func Run(opt *options.Options, genericOptions ...katalystbase.GenericOptions) er
 	}
 
 	for _, genericOption := range genericOptions {
-		genericOption(webhookCtx)
+		genericOption(webhookCtx, conf)
 	}
 
 	// webhook controller ctx first

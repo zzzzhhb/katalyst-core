@@ -68,7 +68,7 @@ func Run(opt *options.Options, genericOptions ...katalystbase.GenericOptions) er
 	}
 
 	for _, genericOption := range genericOptions {
-		genericOption(genericCtx)
+		genericOption(genericCtx, conf)
 	}
 
 	lock := acquireLock(genericCtx, conf)

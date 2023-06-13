@@ -63,7 +63,7 @@ func Run(opt *options.Options, genericOptions ...katalystbase.GenericOptions) er
 	}
 
 	for _, genericOption := range genericOptions {
-		genericOption(controllerCtx)
+		genericOption(controllerCtx, conf)
 	}
 
 	// start controller ctx first
