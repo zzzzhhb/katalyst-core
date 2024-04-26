@@ -34,6 +34,7 @@ import (
 	katalystbase "github.com/kubewharf/katalyst-core/cmd/base"
 	katalystconfig "github.com/kubewharf/katalyst-core/pkg/config"
 	"github.com/kubewharf/katalyst-core/pkg/metaserver"
+	"github.com/kubewharf/katalyst-core/pkg/metaserver/audit"
 )
 
 // InitFunc is used to construct the framework of agent component; all components
@@ -85,6 +86,7 @@ type GenericContext struct {
 	// those are shared among other agent components
 	*metaserver.MetaServer
 	pluginmanager.PluginManager
+	*audit.AuditManager
 }
 
 func NewGenericContext(base *katalystbase.GenericContext, conf *katalystconfig.Configuration) (*GenericContext, error) {
@@ -98,10 +100,13 @@ func NewGenericContext(base *katalystbase.GenericContext, conf *katalystconfig.C
 		return nil, fmt.Errorf("failed init plugin manager: %s", err)
 	}
 
+	auditManager := audit.NewAuditManager(conf.AuditConfiguration, base.EmitterPool.GetDefaultMetricsEmitter())
+
 	return &GenericContext{
 		GenericContext: base,
 		MetaServer:     metaServer,
 		PluginManager:  pluginMgr,
+		AuditManager:   auditManager,
 	}, nil
 }
 
@@ -109,6 +114,7 @@ func (c *GenericContext) Run(ctx context.Context) {
 	go c.GenericContext.Run(ctx)
 	go c.PluginManager.Run(config.NewSourcesReady(func(_ sets.String) bool { return true }), ctx.Done())
 	go c.MetaServer.Run(ctx)
+	go c.AuditManager.Run(ctx)
 	<-ctx.Done()
 }
 

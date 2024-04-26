@@ -16,7 +16,12 @@ limitations under the License.
 
 package common
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+
+	"github.com/kubewharf/katalyst-core/pkg/util/eventbus"
+)
 
 const (
 	// CgroupFSMountPoint default cgroup mount point
@@ -205,4 +210,27 @@ type CgroupMetrics struct {
 	CPU    *CPUMetrics
 	Memory *MemoryMetrics
 	Pid    *PidMetrics
+}
+
+type CGroupEventType string
+
+const (
+	CGroupEventTypeCPU         CGroupEventType = "cpu"
+	CGroupEventTypeMemory      CGroupEventType = "memory"
+	CGroupEventTypeCPUSet      CGroupEventType = "cpu_set"
+	CGroupEventTypeNetCls      CGroupEventType = "net_cls"
+	CGroupEventTypeIOCostQos   CGroupEventType = "io_cost_qos"
+	CGroupEventTypeIOCostModel CGroupEventType = "io_cost_model"
+	CGroupEventTypeIOWeight    CGroupEventType = "io_weight"
+	CGroupEventTypeUnifiedData CGroupEventType = "unified_data"
+)
+
+type CGroupEvent struct {
+	eventbus.BaseEventImpl
+	Cost       time.Duration
+	Type       CGroupEventType
+	CGroupPath string
+	CGroupFile string
+	DevID      string
+	Data       interface{}
 }

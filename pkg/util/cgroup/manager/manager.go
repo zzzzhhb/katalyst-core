@@ -61,9 +61,9 @@ type Manager interface {
 func GetManager() Manager {
 	initManagerOnce.Do(func() {
 		if common.CheckCgroup2UnifiedMode() {
-			manager = v2.NewManager()
+			manager = NewInstrumentedManager(v2.NewManager())
 		} else {
-			manager = v1.NewManager()
+			manager = NewInstrumentedManager(v1.NewManager())
 		}
 	})
 	return manager
